@@ -1,0 +1,27 @@
+[project]
+name = "langchain-practice"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp",
+    "dataclasses-json",
+    "jsonpatch",
+    "langchain",
+    "langchain-community",
+    "langchain-core",
+    "langsmith",
+    "numpy",
+    "pydantic",
+    "PyYAML",
+    "requests",
+    "SQLAlchemy",
+    "tenacity",
+    "langchain_huggingface",
+    "langchain-google-genai",
+    "fastapi",
+    "uvicorn",
+    "streamlit",
+    "router",
+]

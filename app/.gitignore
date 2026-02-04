@@ -1,0 +1,85 @@
+# =========================
+# 🔐 SECRETS / ENV FILES
+# =========================
+.env
+.env.*
+*.env
+secrets.yaml
+secrets.json
+
+# =========================
+# 🐍 PYTHON
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# =========================
+# 📦 VIRTUAL ENVIRONMENTS
+# =========================
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# =========================
+# 🧪 TEST / CACHE
+# =========================
+.pytest_cache/
+.mypy_cache/
+.coverage
+.cache/
+htmlcov/
+
+# =========================
+# 🧠 LANGCHAIN / LLM CACHE
+# =========================
+.langchain/
+.chroma/
+vectorstore/
+*.sqlite
+*.db
+
+# =========================
+# 🌐 STREAMLIT
+# =========================
+.streamlit/
+streamlit.log
+
+# =========================
+# ⚙️ FASTAPI / UVICORN
+# =========================
+logs/
+*.log
+
+# =========================
+# 🖥️ OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# 🛠️ IDEs / EDITORS
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# 📄 JUPYTER
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# 🚀 DOCKER (OPTIONAL)
+# =========================
+.dockerignore
