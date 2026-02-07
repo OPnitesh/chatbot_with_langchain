@@ -1,6 +1,19 @@
 import streamlit as st
 import requests
+import uuid
 
+# -----------------------------
+# SESSION STATE (MUST BE FIRST)
+# -----------------------------
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+
+# -----------------------------
+# CONFIG
+# -----------------------------
 BACKEND_URL = "http://localhost:8000/chat"
 
 st.set_page_config(
@@ -10,16 +23,10 @@ st.set_page_config(
 )
 
 # -----------------------------
-# SESSION STATE
-# -----------------------------
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# -----------------------------
 # HEADER
 # -----------------------------
 st.title("🤖 Chatbot")
-st.caption("FastAPI · LangChain · Gemini")
+st.caption("FastAPI · LangGraph · Gemini")
 
 # -----------------------------
 # CHAT HISTORY
@@ -28,32 +35,13 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# 👇 Invisible anchor (scroll target)
-st.markdown('<div id="chat-bottom"></div>', unsafe_allow_html=True)
-
-# -----------------------------
-# AUTO SCROLL SCRIPT
-# -----------------------------
-def auto_scroll():
-    st.markdown(
-        """
-        <script>
-            const chatBottom = document.getElementById("chat-bottom");
-            if (chatBottom) {
-                chatBottom.scrollIntoView({ behavior: "smooth" });
-            }
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
-
 # -----------------------------
 # CHAT INPUT
 # -----------------------------
 user_input = st.chat_input("Type your message…")
 
 if user_input:
-    # Save user message
+    # Save user message (UI only)
     st.session_state.messages.append(
         {"role": "user", "content": user_input}
     )
@@ -61,13 +49,16 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Call backend
+    # Call backend (LangGraph memory)
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
                 response = requests.post(
                     BACKEND_URL,
-                    json={"messages": st.session_state.messages},
+                    json={
+                        "message": user_input,
+                        "session_id": st.session_state.session_id,
+                    },
                     timeout=60,
                 )
                 response.raise_for_status()
@@ -77,10 +68,7 @@ if user_input:
 
         st.markdown(assistant_reply)
 
-    # Save assistant reply
+    # Save assistant reply (UI only)
     st.session_state.messages.append(
         {"role": "assistant", "content": assistant_reply}
     )
-
-    # ✅ AUTO SCROLL AFTER MESSAGE
-    auto_scroll()

@@ -1,0 +1,36 @@
+[project]
+name = "langchain-practice"
+version = "0.1.0"
+description = "LangChain + LangGraph Chatbot"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    # Core backend
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "requests",
+
+    # LangChain ecosystem
+    "langchain",
+    "langchain-core",
+    "langchain-community",
+    "langchain-google-genai",
+    "langgraph",
+
+    # Utilities
+    "python-dotenv",
+    "tenacity",
+    "PyYAML",
+    "jsonpatch",
+    "dataclasses-json",
+
+    # Optional / future use
+    "numpy",
+    "SQLAlchemy",
+    "langsmith",
+
+    # Frontend
+    "streamlit",
+]
