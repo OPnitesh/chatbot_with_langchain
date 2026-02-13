@@ -1,17 +1,23 @@
+# graph.py
+
 from langgraph.graph import StateGraph, END
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import AIMessage
 from app.llm.state import ChatState
-from dotenv import load_dotenv
-load_dotenv()
+from app.llm.agent import get_chain
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+
+chain = get_chain()
 
 
 def chatbot_node(state: ChatState) -> ChatState:
-    response = llm.invoke(state["messages"])
+    user_input = state["messages"][-1].content
+
+    response = chain.invoke({"input": user_input})
+
     return {
-        "messages": state["messages"] + [response]
+        "messages": state["messages"] + [
+            AIMessage(content=response.content)
+        ]
     }
 
 
@@ -23,5 +29,4 @@ def build_graph():
     return graph.compile()
 
 
-# ✅ BUILD ONCE
 graph = build_graph()
