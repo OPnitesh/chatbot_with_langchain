@@ -9,7 +9,7 @@ load_dotenv()
 
 
 BASE_DIR: Final[Path] = Path(__file__).resolve().parent
-SYSTEM_PROMPT_PATH: Final[Path] = BASE_DIR / "llm_chat.txt"
+SYSTEM_PROMPT_PATH: Final[Path] = BASE_DIR / "system_prompt.txt"
 
 
 def _load_system_prompt(path: Path) -> str:
