@@ -1,6 +1,6 @@
-from typing import TypedDict, List
+from typing import TypedDict
 from langchain_core.messages import BaseMessage
 
 
 class ChatState(TypedDict):
-    messages: List[BaseMessage]
+    messages: list[BaseMessage]

@@ -1,28 +1,39 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
-from app.services.chat_service import generate_response
+"""Chat API routes."""
 
-# 1️⃣ Create router
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, Field
+
+from app.services.chat_service import stream_response
+
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
 
-# 2️⃣ Request schema (what client sends)
 class ChatRequest(BaseModel):
-    message: str
+    message: str = Field(min_length=1, max_length=4000)
+    session_id: str = Field(min_length=1, max_length=128)
 
 
-# 3️⃣ Response schema (what API returns)
 class ChatResponse(BaseModel):
     response: str
 
 
-# 4️⃣ Chat endpoint
-@router.post("", response_model=ChatResponse)
-def chat(req: ChatRequest):
-    """
-    Receives user message,
-    calls chat service,
-    returns chatbot response
-    """
-    reply = generate_response(req.message)
-    return ChatResponse(response=reply)
+# @router.post("", response_model=ChatResponse)
+# def chat(req: ChatRequest) -> ChatResponse:
+#     """Return a chatbot response for the user's message within one session."""
+#     reply = generate_response(req.message, req.session_id)
+#     return ChatResponse(response=reply)
+
+
+@router.post("/stream")
+def chat_stream(req: ChatRequest) -> StreamingResponse:
+    """Stream chatbot response tokens as SSE events."""
+    return StreamingResponse(
+        stream_response(req.message, req.session_id),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )

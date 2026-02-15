@@ -1,35 +1,28 @@
+"""FastAPI application entrypoint."""
+
 from fastapi import FastAPI
-from pydantic import BaseModel
-from app.services.chat_service import generate_response
-
-
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
+from app.api.chat import router as chat_router
 
-app=FastAPI(title="Chatbot API")
+app = FastAPI(title="Chatbot API")
+app.include_router(chat_router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-
-class ChatRequest(BaseModel):
-    message: str
-    session_id: str
-
-# @app.get("/chat")
-# def chat_info():
-#     return {"info": "Use POST /chat with JSON body"}
-
-
-@app.post("/chat")
-def chat(req: ChatRequest):
-    reply = generate_response(req.message,req.session_id)
-    return {"response": reply}
-    
 
 @app.get("/health")
-def health_cheack():
-    return {"status":"healthy"}
+def health_check() -> dict[str, str]:
+    return {"status": "healthy"}
 
 
-if __name__=="__main__":
-    uvicorn.run(app,host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
 
 

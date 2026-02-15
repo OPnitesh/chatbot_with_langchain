@@ -1,5 +1,3 @@
-# graph.py
-
 from langgraph.graph import StateGraph, END
 from langchain_core.messages import AIMessage
 from app.llm.state import ChatState
@@ -10,6 +8,9 @@ chain = get_chain()
 
 
 def chatbot_node(state: ChatState) -> ChatState:
+    if not state["messages"]:
+        raise ValueError("Chat state must include at least one message.")
+
     user_input = state["messages"][-1].content
 
     response = chain.invoke({"input": user_input})

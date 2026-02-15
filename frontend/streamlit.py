@@ -1,4 +1,5 @@
 import streamlit as st
+import json
 import requests
 import uuid
 
@@ -14,7 +15,7 @@ if "session_id" not in st.session_state:
 # -----------------------------
 # CONFIG
 # -----------------------------
-BACKEND_URL = "http://localhost:8000/chat"
+BACKEND_STREAM_URL = "http://localhost:8000/chat/stream"
 
 st.set_page_config(
     page_title="Chatbot",
@@ -49,24 +50,43 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # Call backend (LangGraph memory)
+    def stream_assistant_reply():
+        response = requests.post(
+            BACKEND_STREAM_URL,
+            json={
+                "message": user_input,
+                "session_id": st.session_state.session_id,
+            },
+            stream=True,
+            timeout=120,
+        )
+        response.raise_for_status()
+
+        for line in response.iter_lines(decode_unicode=True):
+            if not line or not line.startswith("data: "):
+                continue
+
+            payload = json.loads(line[6:])
+            event_type = payload.get("type")
+            content = payload.get("content", "")
+
+            if event_type == "token" and content:
+                yield content
+
+            if event_type == "end":
+                break
+
+            if event_type == "error":
+                raise RuntimeError(content or "Streaming failed.")
+
+    # Call backend stream (LangGraph memory)
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                response = requests.post(
-                    BACKEND_URL,
-                    json={
-                        "message": user_input,
-                        "session_id": st.session_state.session_id,
-                    },
-                    timeout=60,
-                )
-                response.raise_for_status()
-                assistant_reply = response.json()["response"]
+                assistant_reply = st.write_stream(stream_assistant_reply)
             except Exception as e:
                 assistant_reply = f"❌ Error: {e}"
-
-        st.markdown(assistant_reply)
+                st.markdown(assistant_reply)
 
     # Save assistant reply (UI only)
     st.session_state.messages.append(
