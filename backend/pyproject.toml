@@ -29,6 +29,7 @@ dependencies = [
     # Optional / future use
     "numpy",
     "SQLAlchemy",
+    "psycopg[binary]",
     "langsmith",
 
     # Frontend

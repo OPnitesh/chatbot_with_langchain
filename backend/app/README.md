@@ -3,17 +3,14 @@
 This backend powers an AWS-focused assistant with:
 - AWS-only guardrails
 - Streaming chat responses (SSE)
-- Session-based in-memory conversation state
+- Session-based PostgreSQL conversation persistence
 
 ## Recommended API
-Use streaming for best UX:
-- `POST /chat/stream` (recommended)
-
-Optional legacy endpoint:
-- `POST /chat` (non-stream, full response at once)
+Use streaming:
+- `POST /chat/stream`
 
 ## Request Contract
-Both chat endpoints accept:
+`POST /chat/stream` accepts:
 
 ```json
 {
@@ -42,6 +39,17 @@ set WATCHFILES_FORCE_POLLING=true
 python -m uvicorn app.main:app --reload --reload-dir app --host 0.0.0.0 --port 8000
 ```
 
+## Run With Docker + PostgreSQL
+From `backend/app`:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+- API on `http://localhost:8000`
+- PostgreSQL on `localhost:5432`
+
 ## Health Check
 `GET /health` returns:
 
@@ -53,11 +61,13 @@ python -m uvicorn app.main:app --reload --reload-dir app --host 0.0.0.0 --port 8
 - `app/main.py`: app entrypoint, CORS, router mounting
 - `app/api/chat.py`: HTTP routes + request/response schemas
 - `app/services/chat_service.py`: core chat logic + streaming orchestration + session memory
+- `app/core/db.py`: SQLAlchemy engine/session initialization
+- `app/core/db_models.py`: database schema (`chat_messages`)
 - `app/llm/agent.py`: LLM + prompt chain construction/caching
 - `app/llm/graph.py`: LangGraph flow node setup
 - `app/llm/state.py`: state typing contract
 - `app/llm/guard.py`: AWS-scope policy enforcement
-- `app/llm/llm_chat.txt`: system behavior/prompt policy
+- `app/llm/system_prompt.txt`: system behavior/prompt policy
 
 ## Best Practices Used
 - Keep route handlers thin; business logic in service layer
@@ -68,7 +78,7 @@ python -m uvicorn app.main:app --reload --reload-dir app --host 0.0.0.0 --port 8
 - Keep prompt policy in a separate text file
 
 ## Production Notes
-- Current session store is in-memory (data resets on restart)
+- Session data is persisted in PostgreSQL
 - Restrict CORS to known frontend origins in production
 - Add auth, rate limiting, and observability before public deployment
 
