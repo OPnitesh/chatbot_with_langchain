@@ -1,43 +1,14 @@
 [project]
-name = "langchain-practice"
+name = "backend"
 version = "0.1.0"
-description = "LangChain + LangGraph Chatbot"
+description = "Building langchain based application"
 readme = "README.md"
 requires-python = ">=3.11"
-
 dependencies = [
-    # Core backend
-    "fastapi",
-    "uvicorn",
-    "pydantic",
-    "requests",
-
-    # LangChain ecosystem
-    "langchain",
-    "langchain-core",
-    "langchain-community",
-    "langchain-google-genai",
-    "langgraph",
-
-    # Utilities
-    "python-dotenv",
-    "tenacity",
-    "PyYAML",
-    "jsonpatch",
-    "dataclasses-json",
-
-    # Optional / future use
-    "numpy",
-    "SQLAlchemy",
-    "psycopg[binary]",
-    "langsmith",
-
-    # Frontend
-    "streamlit",
+    "langchain==1.2.10",
+    "fastapi==0.129.0",
+    "uvicorn[standard]==0.35.0",
+    "pydantic==2.12.5",
+    "pydantic-settings==2.11.0",
+    "langchain-google-genai==2.1.12"
 ]
-
-[tool.uvicorn]
-app = "app.main:app"
-host = "0.0.0.0"
-port = 8000
-reload = true

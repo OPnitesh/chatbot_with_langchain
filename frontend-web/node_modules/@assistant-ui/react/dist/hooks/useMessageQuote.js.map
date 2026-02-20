@@ -1,0 +1,1 @@
+{"version":3,"file":"useMessageQuote.js","sourceRoot":"","sources":["../../src/hooks/useMessageQuote.ts"],"names":[],"mappings":"AAAA,YAAY,CAAC;AAEb,OAAO,EAAE,WAAW,EAAE,MAAM,qBAAqB,CAAC;AAGlD;;;;;;;;;;;;;GAaG;AACH,MAAM,CAAC,MAAM,eAAe,GAAG,GAA0B,EAAE;IACzD,OAAO,WAAW,CAChB,CAAC,CAAC,EAAE,EAAE,CACH,CAAC,CAAC,OAAO,CAAC,QAAQ,EAAE,MAAkC,EAAE,KAE5C,CAChB,CAAC;AACJ,CAAC,CAAC"}
