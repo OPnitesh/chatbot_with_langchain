@@ -1,7 +1,7 @@
 import type { ChatModelAdapter } from "@assistant-ui/react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
-const STREAM_ENDPOINT = `${API_BASE_URL}/chat/stream`;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1/chat";
+// const STREAM_ENDPOINT = `${API_BASE_URL}/chat`;
 const SESSION_KEY = "assistant_ui_session_id";
 
 type SseEvent = {
@@ -106,10 +106,10 @@ export const modelAdapter: ChatModelAdapter = {
 
     const sessionId = (unstable_threadId ?? getSessionId()).slice(0, 128);
 
-    const response = await fetch(STREAM_ENDPOINT, {
+    const response = await fetch({
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "json",
       },
       body: JSON.stringify({
         message: userMessage,
