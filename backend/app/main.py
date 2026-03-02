@@ -1,33 +1,21 @@
-"""FastAPI application entrypoint."""
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from app.api.v1.router import router as v1_router
 
-from app.api.chat import router as chat_router
-from app.core.db import init_db
 
-app = FastAPI(title="Chatbot API")
-app.include_router(chat_router)
+
+app = FastAPI(
+    title="chat-bot",
+    version="v1",
+    description="llm chat bot using langchain and langgraph",
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-@app.on_event("startup")
-def on_startup() -> None:
-    init_db()
-
-
-@app.get("/health")
-def health_check() -> dict[str, str]:
-    return {"status": "healthy"}
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
-
+app.include_router(v1_router)

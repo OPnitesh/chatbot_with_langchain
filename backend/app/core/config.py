@@ -1,16 +1,14 @@
-"""Application configuration."""
-
-from __future__ import annotations
-
-import os
-from dataclasses import dataclass
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-@dataclass(frozen=True)
-class Settings:
-    database_url: str = os.getenv(
-        "DATABASE_URL",
-        "postgresql+psycopg://agent:agent_secret@localhost:5432/agent_db",
+class Settings(BaseSettings):
+    GGOGLE_API_KEY: str
+    MODEL_NAME: str
+    TEMPERATURE: float
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
     )
 
 
