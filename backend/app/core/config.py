@@ -1,8 +1,9 @@
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    GGOGLE_API_KEY: str
+    GOOGLE_API_KEY: str = Field(validation_alias=AliasChoices("GOOGLE_API_KEY", "GGOGLE_API_KEY"))
     MODEL_NAME: str
     TEMPERATURE: float
 

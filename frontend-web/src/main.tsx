@@ -1,20 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { AssistantRuntimeProvider, useLocalRuntime } from "@assistant-ui/react";
-
-import { modelAdapter } from "./runtime";
-import { ChatClone } from "./ui";
-
+import { useAuth, LoginScreen } from "./auth";
+import { ChatInterface } from "./chatbot";
 import "./styles.css";
 
 function App() {
-  const runtime = useLocalRuntime(modelAdapter);
+  const { isAuthenticated, email, login, logout } = useAuth();
 
-  return (
-    <AssistantRuntimeProvider runtime={runtime}>
-      <ChatClone />
-    </AssistantRuntimeProvider>
-  );
+  if (!isAuthenticated) {
+    return <LoginScreen onLogin={login} />;
+  }
+
+  return <ChatInterface userEmail={email!} onLogout={logout} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
