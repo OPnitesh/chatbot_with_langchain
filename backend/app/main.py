@@ -17,4 +17,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def root():
+    return {"message": "Petasight AI Backend is running", "status": "ok"}
+
 app.include_router(v1_router)
