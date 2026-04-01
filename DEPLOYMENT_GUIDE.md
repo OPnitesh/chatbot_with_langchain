@@ -1,4 +1,4 @@
-# Deployment Guide - Philosopher Chatbot
+# Deployment Guide - Philosopher Chatbott
 
 ## Quick Deployment to Vercel
 
