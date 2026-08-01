@@ -23,6 +23,7 @@ coverage.xml
 .venv/
 venv/
 backend/.venv/
+backend/data/
 
 # Build artifacts (Python)
 build/

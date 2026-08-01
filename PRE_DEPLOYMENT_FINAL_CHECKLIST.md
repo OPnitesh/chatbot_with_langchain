@@ -29,7 +29,7 @@
 
 ## 🔒 Security
 
-- [x] Email validation (@petasight.com only)
+- [x] Email format validation on sign-in
 - [x] API key stored in environment variables
 - [x] CORS configured for specific domains
 - [x] Input sanitization on backend
@@ -125,7 +125,7 @@
 ### Live Application
 - [ ] Frontend deployed and accessible
 - [ ] Backend deployed and accessible
-- [ ] Test with @petasight.com email
+- [ ] Test with a valid email sign-in
 - [ ] Verify all features work
 - [ ] Note URLs for submission
 
@@ -187,7 +187,7 @@ I've completed the Full-Stack AI Engineering Challenge. Here are the details:
 - RTL language (Arabic) with philosopher persona
 - Bilingual output (native + English)
 - WCAG 2.0 accessibility
-- @petasight.com authentication
+- Email sign-in for local sessions
 - Live LLM integration
 
 📚 Documentation:
@@ -209,7 +209,7 @@ Best regards,
 ## ⚠️ Important Notes
 
 1. **API Key**: Remember to disable Google API key one week after submission
-2. **Email Domain**: Only @petasight.com emails can access the app
+2. **Email**: Any valid email can sign in locally
 3. **CORS**: Ensure backend allows frontend domain
 4. **Environment Variables**: Never commit .env files to Git
 5. **Testing**: Test thoroughly before submission
